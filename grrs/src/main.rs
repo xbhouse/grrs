@@ -9,33 +9,30 @@ use grrs::find_matches;
 
 #[derive(Parser)]
 struct Cli {
-  /// Pattern to look for
+  /// pattern to look for
   pattern: String,
-  /// Path to the file to read
+  /// path to the file to read
   path: std::path::PathBuf,
 }
 
 fn main() -> Result<()> {
+  /// default logger and initial statement
   env_logger::init();
   info!("starting up");
  
+  /// parse the 2 arguments passed in (pattern)
   let args = Cli::parse();
 
-  println!("arg 1: {:?}", std::env::args().nth(1).unwrap());
-  println!("arg 2: {:?}", std::env::args().nth(2).unwrap());
+  /// print them out
+  println!("arg 1: {:?}", std::env::args().nth(1).unwrap()); /// pattern
+  println!("arg 2: {:?}", std::env::args().nth(2).unwrap()); /// path
 
+  /// read in the file, handle error if it fails
   let content = std::fs::read_to_string(&args.path)
     .with_context(|| format!("could not read file `{}`", &args.path.display()))?;
 
+  /// find pattern matches in file provided
   grrs::find_matches(&content, &args.pattern, &mut std::io::stdout());
 
   Ok(())
-}
-
-
-#[test]
-fn find_a_match() {
-  let mut result = Vec::new();
-  find_matches("hello world", "rld", &mut result);
-  assert_eq!(result, b"hello world\n");
 }
