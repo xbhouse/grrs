@@ -16,16 +16,16 @@ struct Cli {
 }
 
 fn main() -> Result<()> {
-  /// default logger and initial statement
+  /// default logger initialization
   env_logger::init();
-  info!("starting up");
  
-  /// parse the 2 arguments passed in (pattern)
+  /// parse the 2 arguments passed in (pattern and file)
   let args = Cli::parse();
 
   /// print them out
-  println!("arg 1: {:?}", std::env::args().nth(1).unwrap()); /// pattern
-  println!("arg 2: {:?}", std::env::args().nth(2).unwrap()); /// path
+  println!("pattern: {:?}", std::env::args().nth(1).unwrap()); /// pattern
+  println!("filename: {:?}", std::env::args().nth(2).unwrap()); /// path
+  println!("---");
 
   /// read in the file, handle error if it fails
   let content = std::fs::read_to_string(&args.path)
